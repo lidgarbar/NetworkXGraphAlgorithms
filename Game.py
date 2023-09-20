@@ -157,7 +157,7 @@ def simulacion_juego_ejemplo_J1():
     
 
 def simulacion_juego_ejemplo_J2():
-    juego,juego_iniciado,rafo,subgrafo_vacio,subgrafo_no_vacio=carga_datos_ejemplo()
+    juego,juego_iniciado,grafo,subgrafo_vacio,subgrafo_no_vacio=carga_datos_ejemplo()
     juego.colorea_arista(grafo,subgrafo_vacio,(1,2))
     juego.borra_arista(grafo,subgrafo_vacio,(2,3))
     juego.colorea_arista(grafo,subgrafo_vacio,(1,4))   
