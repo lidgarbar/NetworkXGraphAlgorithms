@@ -56,30 +56,34 @@ class Juego:
     def colorea_arista(self,grafo,subgrafo,arista):
         #Primero revisamos que la arista se encuentra en el grafo, sino se encuentra devolvemos el error 
         if(arista not in grafo.edges):
-            return 'Esa arista no se encuentra en el grafo, pruebe con otra'
+            return print('Esa arista no se encuentra en el grafo, pruebe con otra')
+        
+        #Si la arista se ha coloreado ya 
+        if(arista in subgrafo.edges):
+            return print('Esa arista ya ha sido coloreada, escoja otra porfavor')
         
         #Si la arista si esta en el grafo, coloreamos dicha arista en el subgrafo
-        
         subgrafo.edges.append(arista)
 
         #Miramos si vale True, en ese caso decimos que ha ganado el J1
-        return  'El jugador 1 ha ganado' if(self.ganador(subgrafo)) else print('Se ha coloreado la artista',arista,' Turno jugador 2, diga que arista desee borrar de las siguientes \n',grafo.edges)
+        return  print('\nEl jugador 1 ha ganado') if(self.ganador(subgrafo)) else print('\nSe ha coloreado la artista',arista,' \nTurno jugador 2, diga que arista desee borrar de las siguientes \n',grafo.edges)
 
 
     def borra_arista(self,grafo,subgrafo,arista):
         #Primero revisamos que esa arista no ha sido coloreada, si es asi le devolvemos un errro
         if(arista in subgrafo.edges):
-            return 'Esa arista no puede ser borrada, ya ha sido coloreada por el otro jugador'
+            return print('Esa arista no puede ser borrada, ya ha sido coloreada por el otro jugador')
         
         #Si la arista no existe, le devolvemos un error
         if(arista not in grafo.edges):
-            return 'Esa arista no existe en el grafo, escoja otra porfavor'
+            return print('Esa arista no existe en el grafo, escoja otra porfavor')
         
+
         #Eoc la borramos
         grafo.edges.remove(arista)
 
         #Miramos si vale False en ese caso ha ganado el J2
-        return print('Se ha borrado la arista',arista,' Turno jugador 1, diga que arista desea colorear de las siguientes \n',grafo.edges) if(self.ganador(grafo)) else 'El jugador 2 ha ganado'
+        return print('\nSe ha borrado la arista',arista,' \nTurno jugador 1, diga que arista desea colorear de las siguientes \n',grafo.edges) if(self.ganador(grafo)) else print('El jugador 2 ha ganado')
 
 
 
@@ -136,26 +140,43 @@ def carga_datos_ejemplo():
     vertices=[1,2,3,4]
     aristas=[(1,2),(1,4),(2,3),(2,4),(3,4)]
     grafo=Grafo(vertices,aristas)
-    subgrafo=Grafo(vertices,list())
+    subgrafo_vacio=Grafo(vertices,list())
+    subgrafo_no_vacio=Grafo(vertices,[(1,2)])
     nodosJuego=[1,3]
     print('Los datos han sido cargados correctamente')
-    juego=Juego(grafo,subgrafo,nodosJuego)
-    return juego,grafo,subgrafo
+    juego=Juego(grafo,subgrafo_vacio,nodosJuego)
+    juego_iniciado=Juego(grafo,subgrafo_no_vacio,nodosJuego)
+    return juego,juego_iniciado,grafo,subgrafo_vacio,subgrafo_no_vacio
 
 
 def simulacion_juego_ejemplo_J1():
-    juego,grafo,subgrafo=carga_datos_ejemplo()
-    juego.colorea_arista(grafo,subgrafo,(1,2))
-    juego.borra_arista(grafo,subgrafo,(1,4))
-    juego.colorea_arista(grafo,subgrafo,(2,3))
+    juego,juego_iniciado,grafo,subgrafo_vacio,subgrafo_no_vacio=carga_datos_ejemplo()
+    juego.colorea_arista(grafo,subgrafo_vacio,(1,2))
+    juego.borra_arista(grafo,subgrafo_vacio,(1,4))
+    juego.colorea_arista(grafo,subgrafo_vacio,(2,3))
+    
 
 def simulacion_juego_ejemplo_J2():
-    juego,grafo,subgrafo=carga_datos_ejemplo()
-    juego.colorea_arista(grafo,subgrafo,(1,2))
-    juego.borra_arista(grafo,subgrafo,(2,3))
-    juego.colorea_arista(grafo,subgrafo,(1,4))   
-    juego.borra_arista(grafo,subgrafo,(3,4))
+    juego,juego_iniciado,rafo,subgrafo_vacio,subgrafo_no_vacio=carga_datos_ejemplo()
+    juego.colorea_arista(grafo,subgrafo_vacio,(1,2))
+    juego.borra_arista(grafo,subgrafo_vacio,(2,3))
+    juego.colorea_arista(grafo,subgrafo_vacio,(1,4))   
+    juego.borra_arista(grafo,subgrafo_vacio,(3,4))
     
+def test_errores_funciones():
+    juego,juego_iniciado,grafo,subgrafo_vacio,subgrafo_no_vacio=carga_datos_ejemplo()
+    print('\n###########################################################\n#             Pruebas funcion borrar arista               #\n###########################################################')
+    print('\n* PRUEBA 1 Borramos una arista que no existe: ')
+    juego.borra_arista(grafo,subgrafo_vacio,(1,5))
+    print('\n* PRUEBA 2 Borramos una arista coloreada:')
+    juego_iniciado.borra_arista(grafo,subgrafo_no_vacio,(1,2))
+    
+    print('\n###########################################################\n#           Pruebas funcion colorear arista               #\n###########################################################')
+    print('\n* PRUEBA 1 Coloreamos una arista que no existe: ')
+    juego.colorea_arista(grafo,subgrafo_vacio,(1,5))
+    print('\n* PRUEBA 2 Coloreamos una arista que ya ha sido coloreada')
+    juego_iniciado.colorea_arista(grafo,subgrafo_no_vacio,(1,2))
+
 ###########################################################
 #                     Fin Pruebas                         #
 ###########################################################
